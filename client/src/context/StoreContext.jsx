@@ -11,11 +11,11 @@ const StoreContextProvider = (props) => {
     const fetchFoodList = async () => {
         const response = await axios.get(url+"/api/food/list");
         setFoodList(response.data.data);
-    }
+    } 
     useEffect(() => {
-        if (localStorage.getItem("token")){
-            setToken(localStorage.getItem("token"));
-        }
+        // if (localStorage.getItem("token")){
+        //     setToken(localStorage.getItem("token"));
+        // }
         async function loadData () {
             await fetchFoodList();
         }
@@ -29,7 +29,8 @@ const StoreContextProvider = (props) => {
         }
     }
     const removeFromCart = (itemId)=>{
-        setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
+        setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}));
+        
     }
     
     const getTotalCartAmount = () => {
