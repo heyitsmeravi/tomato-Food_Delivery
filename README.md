@@ -1,500 +1,355 @@
 # Tomato Food Delivery
 
-Tomato Food Delivery is a full-stack food ordering application with separate customer and admin interfaces backed by an Express and MongoDB API.
+Tomato Food Delivery is a full-stack food ordering platform with a customer web application, an admin dashboard, and an Express/MongoDB API.
 
-> **Project status:** This README documents the functionality verified in the current source code. Production deployment details and end-to-end production readiness have not been verified.
+## Overview
+
+The repository contains three independent npm projects:
+
+| Project | Directory | Description |
+|---|---|---|
+| Customer application | `client/` | Browse food, manage a cart, authenticate, and place orders |
+| Admin dashboard | `admin/` | Add/remove food items and manage orders |
+| API server | `server/` | Authentication, food, cart, order, image-upload, and Stripe endpoints |
+
+There is no root-level `package.json`; install and run each project separately.
 
 ## Features
 
 ### Customer application
 
-Verified in `client/`:
+- Browse food items by category
+- Add and remove cart items
+- Register and log in with JWT authentication
+- Persist the authentication token in browser `localStorage`
+- Submit delivery information
+- Create Stripe Checkout sessions
+- Verify successful or cancelled payments
+- View customer orders
 
-- Browse food items loaded from the backend API.
-- Filter food items by category.
-- Add and remove items from the cart.
-- View cart totals and delivery fees.
-- Register a customer account.
-- Log in and receive a JWT authentication token.
-- Store the authentication token in browser `localStorage`.
-- Navigate between the home, cart, and order pages.
-- Display food images served by the backend.
+### Admin dashboard
 
-### Admin application
+- Add food items with image uploads
+- View and remove food items
+- View orders and update order statuses
+- Display operation feedback with React Toastify
 
-Verified in `admin/`:
+### API server
 
-- Add food items with a name, description, category, price, and image.
-- View the food item list.
-- Remove food items.
-- Display operation feedback using React Toastify.
-- Navigate between add, list, and orders sections.
-
-The orders page is currently present as a route but contains no implemented order-management UI.
-
-### Server application
-
-Verified in `server/`:
-
-- Connect to MongoDB with Mongoose.
-- Register and authenticate users.
-- Hash passwords with bcrypt.
-- Generate JWT tokens for authenticated users.
-- Manage food records.
-- Upload food images with Multer.
-- Serve uploaded images through the `/images` path.
-- Add, remove, and retrieve cart data for authenticated users.
-- Enable CORS for frontend applications.
+- Express 5 API with MongoDB/Mongoose
+- User registration and login with bcrypt and JWT
+- Food and cart management
+- Order creation and payment verification with Stripe
+- Multer image uploads
+- Static image serving through `/images/<filename>`
 
 ## Technology stack
 
-### Customer client
-
-- React `19.2.8`
-- React Router DOM `7.18.3`
-- Axios `1.20.0`
-- Vite `8.2.2`
-- ESLint
-
-### Admin client
-
-- React `19.2.8`
-- React Router DOM `7.18.4`
-- Axios `1.20.0`
-- React Toastify `11.1.0`
-- Vite `8.2.2`
-- ESLint
-
-### Server
-
-- Node.js with native ES modules
-- Express `5.2.1`
-- Mongoose `9.9.5`
-- MongoDB
-- bcrypt `6.0.0`
-- JSON Web Token (`jsonwebtoken`)
-- Multer `2.3.0`
-- CORS
-- dotenv
-- Nodemon
-
-## Architecture
-
-The repository contains three independent npm projects. There is no root-level `package.json` or shared workspace configuration.
-
-```text
-Customer browser
-      |
-      v
-client/  --------------------\
-                               \
-admin/   -----------------------> server/ Express API ---> MongoDB
-                               /
-Uploaded images <-------------/
-```
-
-### Client
-
-The customer-facing React application is located in `client/`.
-
-Entry point:
-
-```text
-client/src/main.jsx
-```
-
-The client uses `BrowserRouter` for client-side routing and `StoreContextProvider` from `client/src/context/StoreContext.jsx` for shared food, cart, token, and API URL state.
-
-Customer routes are defined in `client/src/App.jsx`:
-
-| Route | Purpose |
-|---|---|
-| `/` | Home page |
-| `/cart` | Cart page |
-| `/order` | Place-order page |
-
-The client currently uses `http://localhost:4000` as its API base URL.
-
-### Admin
-
-The admin dashboard is located in `admin/`.
-
-Entry point:
-
-```text
-admin/src/main.jsx
-```
-
-Routes are defined in `admin/src/App.jsx`:
-
-| Route | Purpose |
-|---|---|
-| `/add` | Add a food item |
-| `/list` | View and remove food items |
-| `/orders` | Orders page placeholder |
-
-The admin application also uses `http://localhost:4000` as its API base URL.
-
-### Server
-
-The backend entry point is `server/server.js`.
-
-The server:
-
-- Runs on port `4000`.
-- Enables JSON request parsing.
-- Enables CORS.
-- Connects to MongoDB.
-- Registers user, food, and cart route groups.
-- Serves uploaded files from `server/uploads/`.
-
-The backend follows a route/controller/model structure:
-
-```text
-HTTP request
-    |
-    v
-server/routes/
-    |
-    v
-server/controllers/
-    |
-    v
-server/models/
-    |
-    v
-MongoDB
-```
+- React 19
+- Vite
+- React Router
+- Axios
+- Node.js and Express
+- MongoDB and Mongoose
+- bcrypt
+- JSON Web Token
+- Stripe
+- Multer
+- React Toastify
 
 ## Project structure
 
 ```text
 .
 ├── admin/
-│   ├── public/
 │   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   └── vite.config.js
+│   ├── .env.example
+│   └── package.json
 ├── client/
-│   ├── public/
 │   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── pages/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   └── vite.config.js
+│   ├── .env.example
+│   └── package.json
 ├── server/
 │   ├── config/
-│   │   └── db.js
 │   ├── controllers/
 │   ├── middleware/
 │   ├── models/
 │   ├── routes/
 │   ├── uploads/
-│   ├── package.json
-│   └── server.js
+│   ├── .env.example
+│   └── package.json
 └── README.md
 ```
 
 ## Prerequisites
 
-The repository does not specify exact runtime versions. The following are required based on the project configuration:
-
-- Node.js
+- Node.js 18 or newer
 - npm
-- MongoDB database access
-- A modern web browser
-
-> **To verify:** Add the supported Node.js and npm versions when they are defined.
+- MongoDB database
+- Stripe account and secret key for checkout
 
 ## Installation
 
-The repository does not contain a root `package.json`, so install dependencies separately in each project:
+Clone the repository and install dependencies in each project:
 
 ```powershell
 git clone <repository-url>
-cd Tomato_Food_Delivery_App
+Set-Location Tomato_Food_Delivery_App
 
-cd server
+Set-Location server
 npm install
 
-cd ..\client
+Set-Location ..\client
 npm install
 
-cd ..\admin
+Set-Location ..\admin
 npm install
 ```
 
-Replace `<repository-url>` with the repository's actual clone URL.
+## Environment configuration
 
-## Environment variables
+Use the provided example files:
 
-Create the file `server/.env` with placeholder values:
+```text
+client/.env.example
+admin/.env.example
+server/.env.example
+```
+
+### Customer frontend
+
+Create `client/.env`:
 
 ```env
-MONGO_URI=<your-mongodb-connection-string>
-JWT_SECRET=<your-jwt-signing-secret>
+VITE_API_URL=http://localhost:4000
 ```
 
-| Variable | Used by | Purpose |
-|---|---|---|
-| `MONGO_URI` | `server/config/db.js` | MongoDB connection string |
-| `JWT_SECRET` | `server/controllers/userController.js` and `server/middleware/auth.js` | Signs and verifies JWT tokens |
+### Admin frontend
 
-Do not commit real credentials, connection strings, passwords, or JWT secrets.
+Create `admin/.env`:
+
+```env
+VITE_API_URL=http://localhost:4000
+```
+
+### API server
+
+Create `server/.env`:
+
+```env
+PORT=4000
+MONGO_URI=your-mongodb-connection-string
+JWT_SECRET=your-long-random-jwt-secret
+STRIPE_SECRET_KEY=sk_test_your-stripe-secret-key
+```
+
+Never commit `.env` files or real credentials. Frontend variables must use the `VITE_` prefix because Vite exposes only prefixed variables to browser code.
 
 ## Local development
 
-Start the backend first.
-
-### Start the server
+Start the API server:
 
 ```powershell
-cd server
+Set-Location server
 npm run server
 ```
 
-This runs `nodemon server.js`. The API listens on:
-
-```text
-http://localhost:4000
-```
-
-Use this health-check endpoint:
+The server uses `process.env.PORT` and falls back to port `4000`. Verify it with:
 
 ```text
 GET http://localhost:4000/
 ```
 
-The verified response is:
+Expected response:
 
 ```text
 API Working
 ```
 
-### Start the customer client
-
-In a separate terminal:
+Start the customer application in a separate terminal:
 
 ```powershell
-cd client
+Set-Location client
 npm run dev
 ```
 
-Other verified client commands:
+Start the admin application in another terminal:
 
 ```powershell
+Set-Location admin
+npm run dev
+```
+
+## Available scripts
+
+### Client and admin
+
+Run these commands from the relevant directory:
+
+```powershell
+npm run dev
 npm run build
 npm run lint
 npm run preview
 ```
 
-### Start the admin client
-
-In another terminal:
+### Server
 
 ```powershell
-cd admin
-npm run dev
+npm run server
 ```
 
-Other verified admin commands:
+The server's `npm test` command is currently a placeholder and no server test runner is configured.
 
-```powershell
-npm run build
-npm run lint
-npm run preview
+## Deployment
+
+### Backend on Render
+
+Create a Render Web Service connected to the repository with:
+
+| Setting | Value |
+|---|---|
+| Root Directory | `server` |
+| Runtime | Node |
+| Build Command | `npm install` |
+| Start Command | `node server.js` |
+
+Add these environment variables in Render:
+
+```env
+PORT=<provided by Render or omit>
+MONGO_URI=<production MongoDB connection string>
+JWT_SECRET=<long production secret>
+STRIPE_SECRET_KEY=<production Stripe secret key>
 ```
 
-## Production deployment
+The current deployed API URL is:
 
-Production deployment is not configured or verified in the current repository.
+```text
+https://tomato-food-delivery-1v8c.onrender.com
+```
 
-The following details still need to be confirmed before publishing production instructions:
+Test the deployment:
 
-- Production frontend URL: `<live-deployment-url>`
-- Production API URL: `<production-api-url>`
-- Hosting providers and deployment commands
-- Production MongoDB configuration
-- Production CORS configuration
-- How frontend builds are served
+```text
+GET https://tomato-food-delivery-1v8c.onrender.com/
+```
 
-Do not treat the local `http://localhost:4000` configuration as a production configuration.
+### Customer frontend on Vercel
 
-## API endpoints
+Create a Vercel project using the repository and configure:
 
-The following endpoints are registered in `server/server.js` and the route files under `server/routes/`.
+| Setting | Value |
+|---|---|
+| Root Directory | `client` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
 
-### Health check
+Add this environment variable in Vercel for the required deployment environments:
+
+```env
+VITE_API_URL=https://tomato-food-delivery-1v8c.onrender.com
+```
+
+Redeploy after adding or changing the variable because Vite injects environment values during the build.
+
+### Admin frontend on Vercel
+
+Create a second Vercel project:
+
+| Setting | Value |
+|---|---|
+| Root Directory | `admin` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+
+Add the same API variable:
+
+```env
+VITE_API_URL=https://tomato-food-delivery-1v8c.onrender.com
+```
+
+## Production considerations
+
+- Set `FRONTEND_URL` on the server and use it for Stripe success and cancellation redirects. The current order controller still contains a local frontend URL and should be updated before production payment testing.
+- Restrict CORS to the deployed customer and admin frontend domains instead of allowing every origin.
+- Render's local filesystem is ephemeral. Uploaded files in `server/uploads/` may be lost after redeployments or service restarts. Use persistent object storage such as Cloudinary or Amazon S3 for production images.
+- Use Stripe live keys only for real payments and keep all secret keys server-side.
+- Configure MongoDB Atlas network access for the Render service.
+- Do not place `MONGO_URI`, `JWT_SECRET`, or `STRIPE_SECRET_KEY` in frontend environment variables.
+- Configure SPA rewrites on the frontend host if direct navigation to routes such as `/cart`, `/order`, `/add`, or `/orders` returns a 404.
+
+## API reference
+
+### Health
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/` | Returns `API Working` |
+| `GET` | `/` | API health check |
 
-### User endpoints
+### Users
 
-Defined in `server/routes/userRoute.js`.
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/user/register` | Register a user and return a JWT |
+| `POST` | `/api/user/login` | Authenticate a user and return a JWT |
 
-| Method | Endpoint | Body | Description |
-|---|---|---|---|
-| `POST` | `/api/user/register` | `name`, `email`, `password` | Registers a user and returns a JWT on success |
-| `POST` | `/api/user/login` | `email`, `password` | Authenticates a user and returns a JWT on success |
+### Food
 
-Example request body:
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/food/add` | Add a food item using multipart form data |
+| `GET` | `/api/food/list` | List food items |
+| `POST` | `/api/food/remove` | Remove a food item and its image |
 
-```json
-{
-  "name": "Example Customer",
-  "email": "customer@example.com",
-  "password": "<your-password>"
-}
-```
+### Cart
 
-The `name` field is not required by the login controller.
+Cart endpoints require the JWT in the `token` request header.
 
-### Food endpoints
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/cart/add` | Add an item to the authenticated user's cart |
+| `POST` | `/api/cart/remove` | Remove one item quantity |
+| `POST` | `/api/cart/get` | Retrieve the authenticated user's cart |
 
-Defined in `server/routes/foodRoute.js`.
+### Orders
 
-| Method | Endpoint | Body | Description |
-|---|---|---|---|
-| `POST` | `/api/food/add` | Multipart form data: `image`, `name`, `description`, `category`, `price` | Adds a food item and uploads its image |
-| `GET` | `/api/food/list` | None | Returns all food items |
-| `POST` | `/api/food/remove` | JSON body containing `id` | Removes a food item and attempts to remove its uploaded image |
-
-Food images are served from:
-
-```text
-/images/<image-filename>
-```
-
-### Cart endpoints
-
-Defined in `server/routes/cartRoute.js`.
-
-These endpoints use `server/middleware/auth.js` and require a token in the request `token` header.
-
-| Method | Endpoint | Body | Description |
-|---|---|---|---|
-| `POST` | `/api/cart/add` | `foodId` | Adds a food item to the authenticated user's cart |
-| `POST` | `/api/cart/remove` | `foodId` | Removes one quantity of a food item |
-| `POST` | `/api/cart/get` | None | Retrieves the authenticated user's cart |
-
-Example header:
-
-```text
-token: <jwt-token>
-```
-
-Example request body:
-
-```json
-{
-  "foodId": "<food-document-id>"
-}
-```
-
-## Screenshots
-
-Screenshots have not been added to the repository yet.
-
-### Customer home page
-
-```text
-<!-- Add customer-home.png here -->
-```
-
-### Customer cart or login interface
-
-```text
-<!-- Add customer-cart.png or customer-login.png here -->
-```
-
-### Admin dashboard
-
-```text
-<!-- Add admin-dashboard.png here -->
-```
-
-> **To verify:** Confirm the screenshots to publish and their final filenames.
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/order/place` | Create an order and Stripe Checkout session |
+| `POST` | `/api/order/verify` | Verify or cancel an order after checkout |
+| `POST` | `/api/order/userorders` | Retrieve orders for the authenticated user |
+| `GET` | `/api/order/list` | List all orders for the admin dashboard |
+| `POST` | `/api/order/status` | Update an order status |
 
 ## Troubleshooting
 
-### The frontend cannot connect to the API
+### Requests go to `/undefined/api/...`
 
-Confirm that:
-
-1. The server is running:
-
-   ```powershell
-   cd server
-   npm run server
-   ```
-
-2. The server is listening on port `4000`.
-3. MongoDB is reachable through the configured `MONGO_URI`.
-4. The frontend is configured to use `http://localhost:4000`.
-
-The client API URL is defined in `client/src/context/StoreContext.jsx`.
-
-The admin API URL is defined in `admin/src/App.jsx` and `admin/src/assets/assets.js`.
-
-### MongoDB connection errors
-
-Confirm that `server/.env` contains:
+The deployed frontend does not have `VITE_API_URL`. Add it to the frontend hosting provider and redeploy:
 
 ```env
-MONGO_URI=<your-mongodb-connection-string>
+VITE_API_URL=https://tomato-food-delivery-1v8c.onrender.com
 ```
 
-Also confirm that the MongoDB deployment permits connections from the machine running the server.
+### Requests still go to `localhost:4000`
 
-### Authentication errors
+The frontend was built before the production variable was added. Trigger a fresh deployment and rebuild.
 
-Confirm that `server/.env` contains:
+### The API is unreachable
 
-```env
-JWT_SECRET=<your-jwt-signing-secret>
-```
-
-Protected cart requests must use the header name expected by `server/middleware/auth.js`:
+Check the Render service logs, confirm MongoDB connectivity, and open:
 
 ```text
-token: <jwt-token>
+https://tomato-food-delivery-1v8c.onrender.com/
 ```
 
-### `npm test` fails in the server project
+### Authentication fails
 
-The server package currently defines `npm test` as the default placeholder command:
+Check that the request reaches `/api/user/login` or `/api/user/register`, that the credentials are valid, and that the server has a configured `JWT_SECRET`.
 
-```text
-Error: no test specified
-```
+## Current deployment status
 
-There is currently no configured server test runner or test suite.
-
-### Customer order page navigation
-
-`client/src/pages/PlaceOrder/PlaceOrder.jsx` currently references `navigate` without defining it with React Router's navigation hook. The checkout button may therefore require code changes before it can navigate successfully.
-
-### Admin orders page is empty
-
-The `/orders` route exists, but `admin/src/pages/Orders/Order.jsx` currently contains only an empty page structure. Order management is not implemented yet.
-
-## Details to verify before publishing
-
-- Replace `<repository-url>` with the actual repository URL.
-- Confirm supported Node.js and npm versions.
-- Add the live deployment URL when available.
-- Confirm the production API URL and deployment process.
-- Confirm production MongoDB and CORS settings.
-- Add final customer and admin screenshots.
-- Confirm production functionality and end-to-end order flow.
+- Backend: deployed on Render at `https://tomato-food-delivery-1v8c.onrender.com`
+- Frontend deployments: configure `VITE_API_URL` in the hosting provider before rebuilding
+- Admin and customer applications remain separate deployments
