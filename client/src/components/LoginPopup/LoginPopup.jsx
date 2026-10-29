@@ -29,7 +29,7 @@ const LoginPopup = ({ setShowLogin }) => {
     }
     // Perform the actual login or registration
     const response = await axios.post(newUrl, data);
-    console.log(response.data.success);
+    // console.log(response.data.success);
     if (response.data.success) {
       setToken(response.data.token);
       localStorage.setItem("token", response.data.token);

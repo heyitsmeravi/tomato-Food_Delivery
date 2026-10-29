@@ -17,14 +17,14 @@ const Add = ({url}) => {
     }
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log(data);
+        // console.log(data);
         const formData = new FormData();
         formData.append("image",image);
         formData.append("name",data.name);
         formData.append("description",data.description);
         formData.append("category",data.category);
         formData.append("price",data.price);
-        console.log(formData);
+        // console.log(formData);
         const response = await axios.post(`${url}/api/food/add`,formData);
         if (response.data.success){
             // alert("Food Item Added Successfully");  
@@ -41,7 +41,7 @@ const Add = ({url}) => {
         }
     }
     useEffect(()=>{
-        console.log(data);
+        // console.log(data);
     },[data]);
   return (
     <div className='add'>
