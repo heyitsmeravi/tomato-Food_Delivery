@@ -8,7 +8,7 @@ import orderRouter from "./routes/orderRoute.js";
 import 'dotenv/config';
 //app config
 const  app = express();
-const PORT = 4000
+const PORT = process.env.PORT || 4000;
 
 // middleware
 app.use(express.json());
@@ -27,6 +27,5 @@ app.use("/images", express.static("uploads"));
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter); 
 app.listen(PORT, ()=>{
-    console.log(`Server started on port http://localhost:${PORT}`);
+    console.log(`Server started on port ${PORT}`);
 });
-
