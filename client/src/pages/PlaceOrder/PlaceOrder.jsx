@@ -24,6 +24,38 @@ const PlaceOrder = () => {
       return {...data, [e.target.name]: e.target.value};
     });
   }; 
+  const [pincodeError, setPincodeError] = useState("");
+  const handlePincodeChange = async (e) => {
+    const pincode = e.target.value;
+    if (pincode.length !== 6 || !/^\d+$/.test(pincode)) {
+      setPincodeError("Please enter a valid 6-digit pincode");
+    } else {
+      setPincodeError("");
+    }
+    setData((data) => {
+      return {...data, [e.target.name]: e.target.value};
+    });
+    try{
+      const response = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
+      const result = response.data;
+      if (result[0].Status !== "Success") {
+        setPincodeError("Invalid pincode. Please enter a valid pincode.");
+        return;
+      }
+      const postOfficeData = result[0].PostOffice[0];
+      setData((data) => {
+        return {
+          ...data,
+          city: postOfficeData.District,
+          state: postOfficeData.State,
+          country: postOfficeData.Country
+        };
+      });
+      setPincodeError("");
+    } catch (error) {
+      console.error("Error fetching pincode data:", error);
+    }
+  };
   const placeOrder = async (e) => {
     e.preventDefault();
     let orderItems = [];
@@ -69,14 +101,15 @@ const PlaceOrder = () => {
         </div>
         <input type="email" placeholder="Email" onChange={onchangeHandler} name="email" value={data.email} required/>
         <input type="text" placeholder="Street" onChange={onchangeHandler} name="street" value={data.street} required/>
+        
         <div className="multi-fields">
-            <input type="text" placeholder="City" onChange={onchangeHandler} name="city" value={data.city} required/>
-            <input type="text" placeholder="State" onChange={onchangeHandler} name="state" value={data.state} required/>
-        </div>
-        <div className="multi-fields">
-            <input type="text" placeholder="Zip Code" onChange={onchangeHandler} name="zipCode" value={data.zipCode} required/>
-            <input type="text" placeholder="Country" onChange={onchangeHandler} name="country" value={data.country} required/>
+            <input type="text" placeholder="Zip Code" onChange={handlePincodeChange} name="zipCode" value={data.zipCode} inputMode="numeric" pattern="[1-9][0-9]{5}" maxLength = {6} required/>
+            <input type="text" placeholder="Country" onChange={onchangeHandler} name="country" value={data.country} readOnly required/>
         </div>   
+        <div className="multi-fields">
+            <input type="text" placeholder="City" onChange={onchangeHandler} name="city" value={data.city} readOnly required/>
+            <input type="text" placeholder="State" onChange={onchangeHandler} name="state" value={data.state} readOnly required/>
+        </div>
         <input type="text" placeholder="Phone Number" onChange={onchangeHandler} name="phone" value={data.phone} required/>
       </div>
       <div className =" place-order-right">
