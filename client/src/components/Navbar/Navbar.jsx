@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import './Navbar.css'
 import {assets} from '../../assets/assets';
@@ -6,15 +6,35 @@ import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
   const { getTotalCartAmount ,token, setToken} = useContext(StoreContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 0 || currentScrollY < lastScrollY.current) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
     setToken("");
   }
   return (
-    <div className = "navbar">
+    <div className={`navbar ${isVisible ? "navbar-visible" : "navbar-hidden"}`}>
       <Link to ="/"> <img src={assets.logo} alt="logo" className='logo'/> </Link>
       <ul className="navbar-menu">
         <Link to="/" onClick={()=>{setMenu("home")}} className = {menu ==="home" ? "active" : ""}>Home</Link>
