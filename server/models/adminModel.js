@@ -1,0 +1,25 @@
+import mongoose from "mongoose";
+
+const adminSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'superadmin'],
+        default: 'admin'
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+
+const adminModel = mongoose.models.admin || mongoose.model("admin", adminSchema);
+export default adminModel;
