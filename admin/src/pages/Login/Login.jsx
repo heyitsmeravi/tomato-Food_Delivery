@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { assets } from "../../assets/assets";
 import "./Login.css";
 
 const Login = ({ setToken, url }) => {
@@ -32,27 +33,51 @@ const Login = ({ setToken, url }) => {
 
     return (
         <div className="login">
-            
+            <div className="login-showcase">
+                <img src={assets.logo} alt="Tomato" className="login-logo" />
+                <div>
+                    <p className="login-kicker">Tomato partner workspace</p>
+                    <h1>Make every order<br /><span>feel like home.</span></h1>
+                    <p className="login-description">
+                        Manage your menu, keep orders moving, and give your customers a better food experience.
+                    </p>
+                </div>
+                <div className="login-highlights">
+                    <span><b>01</b> Menu management</span>
+                    <span><b>02</b> Order operations</span>
+                </div>
+            </div>
             <form onSubmit={handleLogin} className="login-container">
-                <h2>Admin Login</h2>
+                <div className="login-heading">
+                    <p className="login-kicker">Welcome back</p>
+                    <h2>Sign in to Admin</h2>
+                    <p>Use your administrator account to continue.</p>
+                </div>
 
-                <input
-                    type="email"
-                    placeholder="Admin email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
+                <label>
+                    Email address
+                    <input
+                        type="email"
+                        placeholder="you@tomato.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </label>
 
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
+                <label>
+                    Password
+                    <input
+                        type="password"
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </label>
 
-                <button type="submit">Login</button>
+                <button type="submit">Enter dashboard <span>→</span></button>
+                <p className="login-footer">Private workspace · Authorized staff only</p>
             </form>
         </div>
     );

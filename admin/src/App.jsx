@@ -31,7 +31,7 @@ const App = () => {
     };
 
     return (
-        <div>
+        <div className="admin-app">
             <ToastContainer />
 
             {!token ? (
@@ -39,7 +39,6 @@ const App = () => {
             ) : (
                 <>
                     <Navbar logout={logout} />
-                    <hr />
 
                     <div className="app-content">
                         <Sidebar />

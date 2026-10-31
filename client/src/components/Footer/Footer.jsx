@@ -1,6 +1,9 @@
 // import React from 'react'
 import { assets } from '../../assets/assets'
 import './Footer.css'
+
+const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:5173'
+
 const Footer = () => {
   return (
     <div className = "footer" id= "footer">
@@ -29,6 +32,14 @@ const Footer = () => {
                 <li>+91 7494002956</li>
                 <li>heyitsmeravi01@gmail.com</li>
             </ul>
+            <a
+                className="footer-admin-link"
+                href={adminUrl}
+                target="_blank"
+                rel="noreferrer"
+            >
+                Restaurant Partner Portal <span>↗</span>
+            </a>
         </div>
       </div>
       <hr />

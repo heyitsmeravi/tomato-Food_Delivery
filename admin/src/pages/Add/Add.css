@@ -1,25 +1,46 @@
 .add{
-    width:70%;  
-    margin-left:max(5vw, 25px);
-    margin-top:50px;
-    color:#6d6d6d;
-    font-size:16px;
+    width: min(940px, calc(100% - 64px));
+    margin: 34px auto;
+    color: #687287;
+    font-size: 14px;
 }
 .add form{
-    gap: 10px;
+    gap: 18px;
+    background: white;
+    border: 1px solid #e8eaf0;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 8px 25px rgba(23, 32, 51, .04);
+}
+
+.add form::before {
+    content: "Menu studio";
+    color: #172033;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.add form::after {
+    content: "Create and organize the food available in your customer menu.";
+    color: #9aa2b2;
+    font-size: 13px;
+    margin-top: -12px;
+    margin-bottom: 6px;
 }
 
 .add-img-upload img{
     width:120px;
+    border-radius: 10px;
 }
 .add-product-name, .add-product-description{
     width: max(48%, 280px);
 }
 .add-product-name input, .add-product-description textarea{
     width:100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #d9d9d9;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e0e3ea;
     outline:none;
 }
 .add-category-price{
@@ -29,17 +50,29 @@
 
 .add-category select, .add-price input{
     max-width:120px;
-    border-radius: 5px;
-    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    border: 1px solid #e0e3ea;
     outline:none;
-    padding:10px;
+    padding:12px;
 }
 
 .add-btn{
-    cursor:poiter;
-    background-color: black;
+    cursor:pointer;
+    background-color: #ef6c59;
     color:white;
     max-width: 120px;
-    padding: 10px;
+    padding: 12px 22px;
+    border-radius: 8px;
     border:none;
+    font-weight: 700;
+}
+
+@media (max-width: 600px) {
+    .add {
+        width: calc(100% - 28px);
+        margin: 20px auto;
+    }
+    .add form {
+        padding: 20px;
+    }
 }
